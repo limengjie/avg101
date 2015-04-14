@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "intList.h"
-/*#include "intList.c"*/
 
 typedef struct {
 	int from;
@@ -11,9 +11,9 @@ typedef struct {
 
 
 IntList * initEdges(int n) {
-	IntList * adjVs = (IntList *)calloc(n, sizeof(IntList));
+	IntList * adjVs = (IntList *)calloc(n + 1, sizeof(IntList));
 	int i;
-	for (i = 0; i < n; ++i) 
+	for (i = 1; i <= n; ++i) 
 		adjVs[i] = NULL;
 	return adjVs;
 }
@@ -47,10 +47,10 @@ void loadEdges(char * line, IntList * adjVs) {
 void print(IntList * adjVs, int num) {
 	int i;
 
-	for (i = 0; i < num; ++i) {
+	for (i = 1; i <= num; ++i) {
 		IntList pnode = adjVs[i];
 		int init = 1;
-		printf("node %d:\n", i);
+		printf("%d\t", i);
 		while (pnode) {
 			if(init)
 				printf("[");
