@@ -1,13 +1,17 @@
 #include <stdlib.h>
 #include "intList.h"
 
-struct IntListNode {
-	int node;
-	IntList next;
-};
+/*struct IntListNode {*/
+	/*int node;*/
+	/*IntList next;*/
+/*};*/
 
-/*intNil->next = NULL;*/
-/*intNil->node = 0;*/
+/*typedef struct IntListNode IntListNode;*/
+
+const IntList nil = NULL;
+
+
+
 
 int intFirst(IntList oldL) {
 	return oldL->node;
@@ -18,24 +22,10 @@ IntList intRest(IntList oldL) {
 }
 
 IntList intCons(int newE, IntList oldL) {
-	IntList n = oldL;
-	while(n->next != 0) {
-		if (n->node == newE) 
-			break;
-		n = n->next;
-	}
-
-	if (n->next == NULL && n->node == 0) 
-		n->node = newE;
-	else {
-		/*create a new node*/
-		/*IntList newNode = (IntList)calloc(IntListNode);*/
-		/*n->next = newNode;*/
-		/*newNode->node = newE;*/
-		/*newNode->next = NULL;*/
-	}
-
-	return oldL;
+	IntList newList = (IntList)calloc(1, sizeof(IntListNode));
+	newList->node = newE;
+	newList->next = oldL;
+	return newList;
 }
 
 

@@ -1,58 +1,75 @@
 #include <stdio.h>
-/*#include "intList.h"*/
-
-/*struct Node {*/
-	/*int num;*/
-	/*struct Node * next;*/
-/*};*/
+#include <stdlib.h>
+#include "intList.h"
+/*#include "intList.c"*/
 
 typedef struct {
 	int from;
 	int to;
-	float weight;
+	double weight;
 } Edge;
 
 
-int * initEdges(int n) {
-	int * ini = (int *)calloc(n*(n-1), sizeof(int));
-	return ini;
+IntList * initEdges(int n) {
+	IntList * adjVs = (IntList *)calloc(n, sizeof(IntList));
+	int i;
+	for (i = 0; i < n; ++i) 
+		adjVs[i] = NULL;
+	return adjVs;
 }
 
-Edge parseEdge(char * line) {
-		int node0, node1, vars;
-		float weight;
-		vars = sscanf(line, "%d %d  %f", &node0, &node1, weight);
-		
-		if (vars == 2) {
-			printf("%d    %d\n", node0, node1);
-			weight = 0.0;
+Edge parseEdges(char * line) {
+		Edge newE;
+
+		int numFields;
+
+		numFields = sscanf(line, "%d %d %lf %*s", &newE.from, &newE.to, &newE.weight);
+		if (numFields < 2 || numFields > 3) {
+			printf("bad edge: %s", line);
+			exit(1);
 		}
-		else if (vars == 3)
-			printf("%d  %d  %f\n", node0, node1, weight);
 
-		Edge e;
-		e.from = node0;
-		e.to = node1;
-                e.weight = weight;
+		if (numFields == 2)
+			newE.weight = 0.0;
 
-		puts("finish parse edge");
+		/*printf("from:%d to:%d \n", newE.from, newE.to);*/
 
-		return e;
+		return newE;
 }
 
-void loadEdges(char * line, int * adjVs, int num) {
-	Edge e = parseEdge(line);
-	adjVs[(num-1)*e.from + e.to] = 1;
-	/*adjVs[(num-1)*e.to + e.from] = 1;*/
-
-	puts("finish loadEdge");
+void loadEdges(char * line, IntList * adjVs) {
+	Edge e = parseEdges(line);
+	adjVs[e.from] = intCons(e.to, adjVs[e.from]);
+	
 }
 	
+
+void print(IntList * adjVs, int num) {
+	int i;
+
+	for (i = 0; i < num; ++i) {
+		IntList pnode = adjVs[i];
+		int init = 1;
+		printf("node %d:\n", i);
+		while (pnode) {
+			if(init)
+				printf("[");
+			else
+				printf(", ");
+			printf("%d", pnode->node);
+			pnode = pnode->next;
+			init = 0;
+		}
+		if (!init)                          // if the IntList is NULL 
+			printf("]\n");
+	}
+
+}
 
 int main(int argc, char* argv[]) {
 
 	if (argc != 2) {
-		perror("Usage: graph01 input.data");
+		fprintf(stderr, "Usage: graph01 input.data \n");
 		exit(0);
 	}
 
@@ -73,11 +90,13 @@ int main(int argc, char* argv[]) {
 
 
 
-	char line[100];
+	char line[1024];
+	char * fgetsRetn;
 	/*read and parse n*/
 	int n, args;
-	fgets(line, sizeof(line), fp);
-	args = sscanf(line, "%d", &n);
+	fgetsRetn = fgets(line, sizeof(line), fp);
+	args = sscanf(line, "%d %*s",  &n);
+	printf("arguments = %d\n", args);
 	if (args != 1) {
 		fprintf(stderr, "Bad line 1: %s", line);
 		exit(1);
@@ -85,26 +104,23 @@ int main(int argc, char* argv[]) {
 	printf("there are %d nodes\n", n);
 
 	/*initialize the adjacency list*/
-	int * adjVertices;
+	IntList * adjVertices;
 	adjVertices = initEdges(n);
 
 
 
-	int count = 0;
 
+	int edges = 0;
 	// read file to buffer
 	while (fgets(line, sizeof(line), fp)) {
-		printf("%d loop: \n", count++);
+		++edges;
 		/*printf("size of the line is %d\n", sizeof(line));*/
-		loadEdges(line, adjVertices, n);
+		loadEdges(line, adjVertices);
+		/*Edge e;*/
+		/*e = parseEdges(line);*/
 	}
 
-	int i, j;
-	for (i = 0; i < n; ++i) {
-		for (j = 0; j < n -1; ++j)
-			printf("%d  ", adjVertices[i*(n-1) + j]);
-		printf("\n");
-	}
+	print(adjVertices, n);
 
 	return 0;
 }

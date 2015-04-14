@@ -8,6 +8,12 @@
 
 typedef struct IntListNode * IntList;
 
+struct IntListNode {
+        int node;
+        IntList next;
+};
+
+typedef struct IntListNode IntListNode;
 /** intNil denotes the empty IntList */
 extern const IntList intNil;
 
