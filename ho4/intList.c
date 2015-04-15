@@ -1,12 +1,12 @@
 #include <stdlib.h>
 #include "intList.h"
 
-/*struct IntListNode {*/
-	/*int node;*/
-	/*IntList next;*/
-/*};*/
+struct IntListNode {
+	int node;
+	IntList next;
+};
 
-/*typedef struct IntListNode IntListNode;*/
+typedef struct IntListNode IntListNode;
 
 const IntList nil = NULL;
 

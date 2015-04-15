@@ -23,8 +23,8 @@ Edge parseEdges(char * line) {
 		Edge newE;
 		/*int numFields;*/
 
-		/*numFields = sscanf(line, "%d %d %lf %*s",\
-		 * &newE.from, &newE.to, &newE.weight);*/
+		/*numFields = sscanf(line, "%d %d %lf %*s",\*/
+		 /*&newE.from, &newE.to, &newE.weight);*/
 		/*if (numFields < 2 || numFields > 3) {*/
 			/*printf("bad edge: %s", line);*/
 			/*exit(1);*/
@@ -36,7 +36,7 @@ Edge parseEdges(char * line) {
 
 		/*alternative way*/
 		char * lineTmp = strdup(line);
-		char * w0 =  strtok(line, " \t\n");
+		char * w0 =  strtok(lineTmp, " \t\n");
 		char * w1 =  strtok(NULL, " \t\n");
 		char * w2 =  strtok(NULL, " \t\n");
 		char * w3 =  strtok(NULL, " \t\n");
@@ -56,7 +56,7 @@ Edge parseEdges(char * line) {
 
 
 
-		printf("from:%d to:%d \n", newE.from, newE.to);
+		/*printf("from:%d to:%d \n", newE.from, newE.to);*/
 
 		return newE;
 }
