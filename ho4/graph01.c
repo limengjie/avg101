@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <assert.h>
 #include "intList.h"
 
 typedef struct {
@@ -19,52 +20,77 @@ IntList * initEdges(int n) {
 	return adjVs;
 }
 
-Edge parseEdges(char * line) {
-		Edge newE;
-		/*int numFields;*/
 
-		/*numFields = sscanf(line, "%d %d %lf %*s",\*/
-		 /*&newE.from, &newE.to, &newE.weight);*/
-		/*if (numFields < 2 || numFields > 3) {*/
-			/*printf("bad edge: %s", line);*/
-			/*exit(1);*/
-		/*}*/
-		/*if (numFields == 2)*/
-			/*newE.weight = 0.0;*/
+int parseN(char * line) {
+	int num;
+	char * lineTmp = strdup(line);
+	char * w0 =  strtok(lineTmp, " \t\n");
+	char * w1 =  strtok(NULL, " \t\n");
 
+	if (w0 == NULL || w1 != NULL) {
+		fprintf(stderr, "bad line 1: %s", line);
+		exit(1);
+	}
 
+	num = atoi(w0);
 
-		/*alternative way*/
-		char * lineTmp = strdup(line);
-		char * w0 =  strtok(lineTmp, " \t\n");
-		char * w1 =  strtok(NULL, " \t\n");
-		char * w2 =  strtok(NULL, " \t\n");
-		char * w3 =  strtok(NULL, " \t\n");
+	free(lineTmp);
 
-		if (w0 == NULL || w1 == NULL || w3 != NULL) {
-			printf("bad edge: %s", line);
-			exit(1);
-		}
+	return num;
 
-		newE.from = atoi(w0);
-		newE.to   = atoi(w1);
-		if (w2 != NULL)
-			newE.weight = atof(w2);
-		else
-			newE.weight = 0.0;
-		free(lineTmp);
-
-
-
-		/*printf("from:%d to:%d \n", newE.from, newE.to);*/
-
-		return newE;
 }
 
-void loadEdges(char * line, IntList * adjVs) {
+
+Edge parseEdges(char * line, int num) {
+	Edge newE;
+	/*int numFields;*/
+
+	/*numFields = sscanf(line, "%d %d %lf %*s",\*/
+	 /*&newE.from, &newE.to, &newE.weight);*/
+	/*if (numFields < 2 || numFields > 3) {*/
+		/*printf("bad edge: %s", line);*/
+		/*exit(1);*/
+	/*}*/
+	/*if (numFields == 2)*/
+		/*newE.weight = 0.0;*/
+
+
+	/*alternative way*/
+	char * lineTmp = strdup(line);
+	char * w0 =  strtok(lineTmp, " \t\n");
+	char * w1 =  strtok(NULL, " \t\n");
+	char * w2 =  strtok(NULL, " \t\n");
+	char * w3 =  strtok(NULL, " \t\n");
+
+	if (w0 == NULL || w1 == NULL || w3 != NULL) {
+		fprintf(stderr, "bad edge: %s", line);
+		exit(1);
+	}
+
+	newE.from = atoi(w0);
+	newE.to   = atoi(w1);
+
+	/*ensure it won't lead to segmantation fault*/
+	assert(newE.from > 0 && newE.from <= num);
+	assert(newE.to   > 0 && newE.to   <= num);
+
+	if (w2 != NULL)
+		newE.weight = atof(w2);
+	else
+		newE.weight = 0.0;
+	free(lineTmp);
+
+
+
+	/*printf("from:%d to:%d \n", newE.from, newE.to);*/
+
+	return newE;
+}
+
+void loadEdges(char * line, IntList * adjVs, int num) {
 
 	/*parse line and get edges*/
-	Edge e = parseEdges(line);
+	Edge e = parseEdges(line, num);
 
 	/*use edges to get adjacency vertices list*/
 	adjVs[e.from] = intCons(e.to, adjVs[e.from]);
@@ -89,7 +115,9 @@ void print(IntList * adjVs, int num) {
 			pnode = intRest(pnode);
 			init = 0;
 		}
-		if (!init)                          // if the IntList is NULL 
+		if (init)                          // if the IntList is NULL 
+			printf("NULL");
+		else
 			printf("]");
 		printf("\n");
 	}
@@ -120,18 +148,16 @@ int main(int argc, char* argv[]) {
 
 
 
+	/*read and parse n*/
 	char line[1024];
 	char * fgetsRetn;
-	/*read and parse n*/
-	int n, args;
+	int n;
 	fgetsRetn = fgets(line, sizeof(line), fp);
-	args = sscanf(line, "%d %*s",  &n);
-	/*printf("arguments = %d\n", args);*/
-	if (args != 1) {
-		fprintf(stderr, "Bad line 1: %s", line);
-		exit(1);
-	}
-	printf("there are %d nodes\n", n);
+	if (!fgetsRetn)
+		fprintf(stderr, "empty file\n");
+	n = parseN(line);
+
+
 
 	/*initialize the adjacency list*/
 	IntList * adjVertices;
@@ -139,16 +165,21 @@ int main(int argc, char* argv[]) {
 
 
 
-
-	int edges = 0;
 	// read file to buffer and parse each line
+	int edges = 0;
 	while (fgets(line, sizeof(line), fp)) {
 		++edges;
-		loadEdges(line, adjVertices);
+		loadEdges(line, adjVertices, n);
 	}
 
+
+	/*print the resulct*/
+	printf("%d nodes\n", n);
+	printf("%d edges\n", edges);
 	print(adjVertices, n);
 
+	
+	/*clean up before leaving*/
 	fclose(fp);
 	free(adjVertices);
 
