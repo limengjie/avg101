@@ -2,33 +2,51 @@
 # Mengjie Li   
 # mli55@ucsc.edu
 # CMPS 101 Spring 2015 - Intro to Algorithm
-# pa01 
+# pa02 
 /////////////////////////////////////////////////////////////
 
 
 Purpose:
 
-The purpose of this assginment is to read all lines from a file and transfer it into a graph.
+The purpose of this assginment is to add two functions to pa01.
+The first function will transpose a graph. The second function can detect cycle
+in a graph and print a node which might be in the cycle.
 
 
 files:
 
-graph01.c
+graph02.c
 intList.h
 intList.c
 Makefile
-testFiles directory
+testFiles 
 
 
 compile:
 
 make intList.o
-make graph01
+make graph02
+
+
+
+main function:
+
+We add two functions based on our last assignment.
+After the graph is built, we transpose it and create a new graph called
+tranGraph.
+Then we use the hasCycle function to detect both the original graph and
+transpose graph. To accomplish this goal, hasCylceLen function will be called
+and use DFS to explore the depth from every node. If the depth is larger than
+the number of nodes, there is a cycle found in the graph. 
+Once it finds a cycle, it will print a vertex that might be in
+that cycle.
+
+
 
 
 usage:
 
-./graph01 testfile
+./graph02 testfile
 
 
 
@@ -36,20 +54,13 @@ test files:
 
 There are several test files in testFiles directory to test all kinds of problems.
 
-In nodeErr.in file, the first line has more than one arguments. 
-run:
-./graph01 ./testFiles/nodeErr.in
+In cycle0.in, cycle1.in and cycle2.in files, the function should be cable to
+detect cycle.
+In cycle1.in, there is an edge point to a node itself. In cycle2.in, there are
+two nodes point to each other.
 
-In edgeErr.in file, there are more than 3 arguments in a line. 
-run:
-./graph01 ./testFiles/edgeErr.in
+In nocycle0.in and nocycle1.in, no cycle should be detected.
+In nocycle1.in, there is an edge out of range. We do not add it but print a
+message and keep going.
 
-In outofrange.in file, there is a node whose value is larger than the number of nodes. 
-run:
-./graph01 ./testFiles/outofrange.in
-
-Files test.in, weighted.in and gr02test0.in are correct.
-run:
-./graph01 ./testFiles/test.in
-./graph01 ./testFiles/weighted.in
-./graph01 ./testFiles/gr02test0.in
+The rest of input files are used for last assignment.

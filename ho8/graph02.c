@@ -12,6 +12,9 @@ typedef struct {
 } Edge;
 
 
+FILE * open_file(char *);
+/*void rd_stdin(IntList *);*/
+/*void rd_file(IntList *, char *);*/
 IntList * initEdges(int);
 int parseN(char *);
 Edge parseEdges(char *, int);
@@ -32,27 +35,23 @@ int main(int argc, char* argv[]) {
 	}
 
 
-        //open a file
-	char * infile = argv[1];
+	/*open file*/
 	FILE * fp;
-	fp = fopen(infile, "r");
-	if (fp == NULL) {
-		fprintf(stderr, "no such file!\n");
-		exit(-1);
-	}
-	printf("Opened %s for input\n", infile);
-
+	if (strcmp(argv[1], "-"))  //build graph from file
+		/*open a file*/
+		fp = open_file(argv[1]);
+	else  // build graph from stdin
+		fp = stdin;
 
 
 	/*read and parse n*/
 	char line[1024];
-	char * fgetsRetn;
 	int n;
+	char * fgetsRetn;
 	fgetsRetn = fgets(line, sizeof(line), fp);
 	if (!fgetsRetn)
 		fprintf(stderr, "empty file\n");
 	n = parseN(line);
-
 
 
 	/*initialize the adjacency list*/
@@ -60,18 +59,14 @@ int main(int argc, char* argv[]) {
 	adjVertices = initEdges(n);
 
 
-
-	// read file to buffer and parse each line
-	int edges = 0;
+	/*read file to buffer and parse each line*/
 	while (fgets(line, sizeof(line), fp)) {
-		++edges;
 		loadEdges(line, adjVertices, n);
 	}
 
 
-	/*print the resulct*/
-	printf("%d nodes\n", n);
-	printf("%d edges\n", edges);
+	/*print the result*/
+	printf("This is the original graph. \n");
 	print(adjVertices, n);
 
 
@@ -85,14 +80,13 @@ int main(int argc, char* argv[]) {
 		puts("no cycle");
 
 
+
 	/*transpose a graph*/
 	IntList * tranGraph = transposeGraph(adjVertices, n);
-	puts("transpose graph:");
+	puts("\ntranspose graph:");
 	print(tranGraph, n);
 
-
-
-	/*detect transpose graph*/
+	/*detect cycle in transpose graph*/
 	cycle = hasCycle(tranGraph, n);
 	if (cycle)
 		puts("cycle exsits in transpose graph");
@@ -108,6 +102,20 @@ int main(int argc, char* argv[]) {
 
 
 	return 0;
+}
+
+
+FILE * open_file(char * infile) {
+        //open a file
+	FILE * fp;
+	fp = fopen(infile, "r");
+	if (fp == NULL) {
+		fprintf(stderr, "no such file!\n");
+		exit(-1);
+	}
+	printf("Opened %s for input\n", infile);
+
+	return fp;
 }
 
 
@@ -187,9 +195,6 @@ Edge parseEdges(char * line, int num) {
 	free(lineTmp);
 
 
-
-	/*printf("from:%d to:%d \n", newE.from, newE.to);*/
-
 	return newE;
 }
 
@@ -210,6 +215,7 @@ void loadEdges(char * line, IntList * adjVs, int num) {
 void print(IntList * adjVs, int num) {
 	int i;
 
+	printf("This graph has %d nodes.\n", num);
 	for (i = 1; i <= num; ++i) {
 		IntList pnode = adjVs[i];
 		int init = 1;
@@ -259,8 +265,8 @@ int hasCycle(IntList * origGraph, int n) {
 	int isCycle;
 	int i;
 
-	//find the node without entering edge and set it as root
-	//then apply the DFS to find out if it has cycle or not
+	//apply the DFS to find out if it has cycle or not
+	//start from every node and get the longest distance it can reach
 	for (i = 1; i <= n; ++i) {
 		printf("root %d:\n", i);
 		isCycle = hasCycleLen(origGraph, n, 0, origGraph[i]);
@@ -268,7 +274,6 @@ int hasCycle(IntList * origGraph, int n) {
 			return 1;
 		}
 	}
-
 	return 0;
 }
 
