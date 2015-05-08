@@ -10,9 +10,6 @@ typedef struct IntListNode IntListNode;
 
 const IntList nil = NULL;
 
-
-
-
 int intFirst(IntList oldL) {
 	return oldL->node;
 }

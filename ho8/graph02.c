@@ -13,8 +13,6 @@ typedef struct {
 
 
 FILE * open_file(char *);
-/*void rd_stdin(IntList *);*/
-/*void rd_file(IntList *, char *);*/
 IntList * initEdges(int);
 int parseN(char *);
 Edge parseEdges(char *, int);
@@ -35,10 +33,9 @@ int main(int argc, char* argv[]) {
 	}
 
 
-	/*open file*/
+	/*open a file*/
 	FILE * fp;
 	if (strcmp(argv[1], "-"))  //build graph from file
-		/*open a file*/
 		fp = open_file(argv[1]);
 	else  // build graph from stdin
 		fp = stdin;
