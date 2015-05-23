@@ -13,7 +13,6 @@ typedef struct IntListNode * IntList;
 extern const IntList intNil;
 
 /* Access functions
- * (what are the preconditions?)
  */
 
 /** first
@@ -25,7 +24,6 @@ int intFirst(IntList oldL);
 IntList intRest(IntList oldL);
 
 /* Constructors
- * (what are the preconditions and postconditions?)
  */
 
 /** cons
