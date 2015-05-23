@@ -32,6 +32,16 @@ int * dfsSweep1(IntList[], int);
 int dfsTrace1(IntList[], int, int[], int[], int[],\
                               int[], int[], int);
 
+//dfsPhase2
+int * initDfstRoot(int);
+void printArrays(int, int[], int[], int[]);
+void printStk(int[], int);
+void printScc(int[], int);
+int dfsT2(IntList[], int[], int, int,\
+      int[], int[], int[], int[], int);
+void dfsTsweep2(IntList [], int, int []);
+
+
 #endif
 
 

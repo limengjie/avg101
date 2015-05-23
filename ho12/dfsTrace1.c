@@ -127,6 +127,7 @@ void printGraph(IntList * adjVs, int num) {
                         printf("]");
                 printf("\n");
         }
+        puts(" ");
 
 }
 
@@ -196,15 +197,13 @@ int hasCycleLen(IntList * origGraph, int n, int sofar, IntList v) {
 
 
 
-/*DFS*/
-
+/*Scc phase 1*/
 int * dfsSweep1(IntList * adjVs, int n) {
         int * color, * dTime1, * fTime1;
         int * parent1, * fStk1 = NULL;
         int time = 0;
 
-        /*initialize arrays we are going to use
-         * later in DFS*/
+        /*initialize arrays we are going to use later in DFS*/
         color = initColor(n);
         dTime1 = initDiscoverTime(n);
         fTime1 = initFinishTime(n);
@@ -213,7 +212,7 @@ int * dfsSweep1(IntList * adjVs, int n) {
 
 
 
-        /*call DFS*/
+        /*recursively call DFS*/
         int i;
         for (i = 1; i <= n; ++i)
                 if (color[i] == WHITE)
@@ -221,23 +220,17 @@ int * dfsSweep1(IntList * adjVs, int n) {
                                         fTime1, parent1, fStk1, time);
 
         /*print out the results*/
-        puts("======================arrays========================");
-        printf("vertex\t color\t dTime\t fTime\t parent\n");
-        for (i = 1; i <= n; ++i) {
-                printf("%d\t", i);
-                if (color[i] == BLACK) 
-                        printf("black\t");
-                else 
-                        printf("gray or white\t");
-                printf("%d\t %d\t %d\n", dTime1[i], fTime1[i], parent1[i]);
-        }
+        printArrays(n, dTime1, fTime1, parent1);
 
         /*print out the stack*/
-        puts("=====================stack========================");
-        printf("order\t vertex\n");
-        for (i = 1; i <= n; ++i)
-                printf("%d:\t %d\n", i, fStk1[i]);
+        printStk(fStk1, n);
 
+
+        /*free heap*/
+        free(color);
+        free(dTime1);
+        free(fTime1);
+        free(parent1);
 
         return fStk1;
 }
@@ -287,7 +280,10 @@ int dfsTrace1(IntList * adjVs, int v, int * color, int * dTime,\
 
 int * initColor(int num) {
         int * color = (int *)malloc((num+1)*sizeof(int));
-        memset(color, 0, num + 1);
+        /*memset(color, WHITE, num + 1);*/
+        int i;
+        for(i = 0; i <= num; ++i)
+                color[i] = WHITE;
 
         return color;
 }
@@ -295,7 +291,10 @@ int * initColor(int num) {
 
 int * initDiscoverTime(int num) {
         int * dTime = (int *)malloc((num+1)*sizeof(int));
-        memset(dTime, 0, num + 1);
+        /*memset(dTime, 0, num + 1);*/
+        int i;
+        for(i = 0; i <= num; ++i)
+                dTime[i] = 0;
 
         return dTime;
 }
@@ -303,7 +302,10 @@ int * initDiscoverTime(int num) {
 
 int * initFinishTime(int num) {
         int * fTime = (int *)malloc((num+1)*sizeof(int));
-        memset(fTime, 0, num + 1);
+        /*memset(fTime, 0, num + 1);*/
+        int i;
+        for(i = 0; i <= num; ++i)
+                fTime[i] = 0;
 
         return fTime;
 }
@@ -321,8 +323,128 @@ int * initParent(int num) {
 
 int * initFinishStk(int num) {
         int * fStk = (int *)malloc((num+1)*sizeof(int));
-        memset(fStk, 0, num + 1);
+        /*memset(fStk, 0, num + 1);*/
+        int i;
+
+        for(i = 0; i <= num; ++i)
+                fStk[i] = 0;
 
         return fStk;
 }
 
+void printArrays(int n, int * dTime, int * fTime, int * parent) {
+        int i;
+
+        puts("======================arrays========================");
+        puts("vertex\t dTime\t fTime\t parent");
+        for(i = 1; i <= n; ++i) {
+                printf("%d\t %d\t", i, dTime[i]);
+                printf("%d\t %d\n", fTime[i], parent[i]);
+        }
+        puts(" ");
+
+}
+
+void printStk(int * fStk, int n) {
+        int i;
+
+        puts("=====================stack========================");
+        printf("order\t vertex\n");
+        for (i = 1; i <= n; ++i)
+                printf("%d:\t %d\n", i, fStk[i]);
+        puts(" ");
+}
+
+
+/*dfsPhase2*/
+int * initDfstRoot(int num) {
+        int * dfstRoot = (int *)malloc((num+1)*sizeof(int));
+        /*memset(dfst, 0, num + 1);*/
+        int i;
+
+        for(i = 0; i <= num; ++i)
+                dfstRoot[i] = 0;
+
+        return dfstRoot;
+}
+
+void dfsTsweep2(IntList * adjTrans, int n, int * fStk) {
+        int * color2, * dTime2, * fTime2;
+        int * parent2, * scc;
+        int time = 0;
+
+        /*initialize arrays*/
+        color2 = initColor(n);
+        dTime2 = initDiscoverTime(n);
+        fTime2 = initFinishTime(n);
+        parent2 = initParent(n);
+        /*scc's leader*/
+        scc = initDfstRoot(n);
+
+
+        /*pop the stack and use DFS to transpose graph*/
+        int i;
+        for (i = n; i > 0; --i) {
+                if (color2[fStk[i]] == WHITE)
+                        time = dfsT2(adjTrans, color2, fStk[i], fStk[i],\
+                                     scc, dTime2, fTime2, parent2, time);
+        }
+
+        /*print out the results*/
+        printArrays(n, dTime2, fTime2, parent2);
+        printScc(scc, n);
+
+
+        /*free heap*/
+        free(color2);
+        free(dTime2);
+        free(fTime2);
+        free(parent2);
+        free(scc);
+
+}
+
+int dfsT2(IntList * adjTrans, int * color,\
+           int v, int leader, int * scc,\
+           int * dTime, int * fTime,\
+           int * parent, int time) {
+
+        int w;
+        IntList remAdj;
+
+        color[v] = GRAY;
+        scc[v] = leader;
+        ++time;
+        dTime[v] = time;
+
+        remAdj = adjTrans[v];
+        while(remAdj != intNil) {
+                w = intFirst(remAdj);
+                if (color[w] == WHITE) {
+                        parent[w] = v;
+                        time = dfsT2(adjTrans, color, w, leader, scc,\
+                                     dTime, fTime, parent, time);
+                }
+
+                remAdj = intRest(remAdj);
+        }
+
+        ++time;
+        fTime[v] = time;
+        color[v] = BLACK;
+
+
+        return time;
+}
+
+void printScc(int * scc, int n) {
+        int i;
+
+        puts("=====================scc===========================");
+        puts("vertex\t leader");
+        for(i = 1; i <= n; ++i) {
+                printf("%d\t %d\n", i, scc[i]);
+        }
+        puts(" ");
+
+}
