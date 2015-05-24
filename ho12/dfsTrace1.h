@@ -31,7 +31,8 @@ int * initDiscoverTime(int);
 int * initFinishTime(int);
 int * initParent(int);
 int * initFinishStk(int);
-//new stack ///////////////////////////////////////////
+
+
 struct finishTime
 {
    int time;
@@ -47,28 +48,25 @@ typedef struct
    FinishTime * last;
 } Stack;
 
-
 Stack * initStk();
 int isEmptyStk(Stack *);
-void printStack(Stack *);
+void printStk(Stack *);
 void pushStk(Stack *, int);
 int topStk(Stack *);
 void popStk(Stack *);
 
 
-/////////////////////////////////////////////////////////
-int * dfsSweep1(IntList[], int);
+Stack * dfsSweep1(IntList[], int);
 int dfsTrace1(IntList[], int, int[], int[], int[],\
-                              int[], int[], int);
+                              int[], Stack *, int);
 
 //dfsPhase2
 int * initDfstRoot(int);
 void printArrays(int, int[], int[], int[]);
-void printStk(int[], int);
 void printScc(int[], int);
 int dfsT2(IntList[], int[], int, int,\
       int[], int[], int[], int[], int);
-void dfsTsweep2(IntList [], int, int []);
+void dfsTsweep2(IntList[], int, Stack *);
 
 
 #endif

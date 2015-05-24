@@ -52,16 +52,16 @@ int main(int argc, char* argv[]) {
 
 
 	/*scc phase 1*/
-	int * finishStk1 = dfsSweep1(adjVertices, n);
+	Stack * finishStk1 = dfsSweep1(adjVertices, n);
 
 	/*print out the stack*/
-	printStk(finishStk1, n);
+	printStk(finishStk1);
 
 
 
 	/*transpose a graph*/
 	IntList * tranGraph = transposeGraph(adjVertices, n);
-	puts("\ntranspose graph:");
+	puts("=====================transpose graph=====================");
 	printGraph(tranGraph, n);
 
 

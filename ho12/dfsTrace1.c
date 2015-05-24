@@ -198,9 +198,8 @@ int hasCycleLen(IntList * origGraph, int n, int sofar, IntList v) {
 
 
 /*Scc phase 1*/
-int * dfsSweep1(IntList * adjVs, int n) {
+Stack * dfsSweep1(IntList * adjVs, int n) {
         int * color, * dTime1, * fTime1, * parent1;
-        int * fStk1 = NULL;
         int time = 0;
 
         /*initialize arrays we are going to use later in DFS*/
@@ -208,7 +207,7 @@ int * dfsSweep1(IntList * adjVs, int n) {
         dTime1 = initDiscoverTime(n);
         fTime1 = initFinishTime(n);
         parent1 = initParent(n);
-        fStk1 = initFinishTime(n);
+        Stack * stk1 = initStk();
         
 
 
@@ -218,13 +217,10 @@ int * dfsSweep1(IntList * adjVs, int n) {
         for (i = 1; i <= n; ++i)
                 if (color[i] == WHITE)
                         time = dfsTrace1(adjVs, i, color, dTime1,\
-                                        fTime1, parent1, fStk1, time);
+                                        fTime1, parent1, stk1, time);
 
         /*print out the results*/
         printArrays(n, dTime1, fTime1, parent1);
-
-        /*[>print out the stack<]*/
-        /*printStk(fStk1, n);*/
 
 
         /*free heap*/
@@ -233,105 +229,14 @@ int * dfsSweep1(IntList * adjVs, int n) {
         free(fTime1);
         free(parent1);
 
-        ////////////////////////////////////////////////
-        /*[>teststack<]*/
-        /*Stack * stk_ptr = initStk();*/
-        /*int array[5] = {0, 1, 2, 3, 4};*/
-        /*int j;*/
-        /*for(j = 0; j < 5; ++j) {*/
-                /*pushStk(stk_ptr, array[j]);*/
-        /*}*/
 
-        /*if (isEmptyStk(stk_ptr))*/
-                /*puts("Empty stack\n");*/
-        /*else*/
-                /*printf("stack size = %d\n", stk_ptr->size);*/
-
-        /*printStack(stk_ptr);*/
-
-        /*while(!isEmptyStk(stk_ptr)) {*/
-                /*printf("pop %d\n", topStk(stk_ptr));*/
-                /*popStk(stk_ptr);*/
-        /*}*/
-
-        /*printStack(stk_ptr);*/
-
-        /////////////////////////////////////////////
-
-        return fStk1;
+        return stk1;
 }
 
-////////////////////////new stack///////////////////////////////////
-Stack * initStk() {
-        Stack * stk = (Stack *)malloc(sizeof(Stack));
-        stk->last = NULL;
-        stk->size = 0;
-
-        return stk;
-}
-
-int isEmptyStk(Stack * stk) {
-        if (stk->size == 0)
-                return 1;
-        else
-                return 0;
-}
-
-void printStack(Stack * stk) {
-        if (isEmptyStk(stk)) {
-                puts("Empty stack");
-                return;
-        }
-
-        FinishTime * ft = stk->last;
-        puts("=====================Stack=====================");
-        while(ft) {
-                printf("%d\n", ft->time);
-                ft = ft->prev;
-        }
-        puts(" ");
-}
-
-
-void pushStk(Stack * stk, int elt) {
-        /*create a new FinishTime*/
-        FinishTime * newElt = (FinishTime *)malloc(sizeof(FinishTime));
-
-        newElt->next = NULL;
-        newElt->time = elt;
-        newElt->prev = stk->last;
-        if (!isEmptyStk(stk)) {
-                (stk->last)->next = newElt;
-        }
-        stk->last = newElt;
-        stk->size++;
-}
-
-
-int topStk(Stack * stk) {
-        if (isEmptyStk(stk))
-                return -1;
-        else
-                return (stk->last)->time;
-}
-
-void popStk(Stack * stk) {
-        if (isEmptyStk(stk))
-                return;
-
-        FinishTime * top = stk->last;
-        stk->last = top->prev;
-        free(top);
-        stk->size--;
-}
-
-
-
-        //////////////////////////////////////////////////////
         
         
 int dfsTrace1(IntList * adjVs, int v, int * color, int * dTime,\
-                int * fTime, int * parent, int * fStk, int time) {
+                int * fTime, int * parent, Stack * fStk, int time) {
         int w;
         IntList remAdj;
 
@@ -356,15 +261,7 @@ int dfsTrace1(IntList * adjVs, int v, int * color, int * dTime,\
         color[v] = BLACK;
 
         /*push vertex v into stack*/
-        int i = 1;
-        while(i <= 6) {
-                if (fStk[i] == 0) {
-                        fStk[i] = v;
-                        break;
-                }
-                else
-                        ++i;
-        }
+        pushStk(fStk, v);
 
 
         return time;
@@ -428,6 +325,71 @@ int * initFinishStk(int num) {
 }
 
         
+Stack * initStk() {
+        Stack * stk = (Stack *)malloc(sizeof(Stack));
+        stk->last = NULL;
+        stk->size = 0;
+
+        return stk;
+}
+
+int isEmptyStk(Stack * stk) {
+        if (stk->size == 0)
+                return 1;
+        else
+                return 0;
+}
+
+void printStk(Stack * stk) {
+        if (isEmptyStk(stk)) {
+                puts("Empty stack");
+                return;
+        }
+
+        FinishTime * ft = stk->last;
+        puts("=====================Stack=====================");
+        while(ft) {
+                printf("%d\n", ft->time);
+                ft = ft->prev;
+        }
+        puts("___\nstk\n");
+}
+
+
+void pushStk(Stack * stk, int elt) {
+        /*create a new FinishTime*/
+        FinishTime * newElt = (FinishTime *)malloc(sizeof(FinishTime));
+
+        newElt->next = NULL;
+        newElt->time = elt;
+        newElt->prev = stk->last;
+        if (!isEmptyStk(stk)) {
+                (stk->last)->next = newElt;
+        }
+        stk->last = newElt;
+        stk->size++;
+}
+
+
+int topStk(Stack * stk) {
+        if (isEmptyStk(stk))
+                return -1;
+        else
+                return (stk->last)->time;
+}
+
+void popStk(Stack * stk) {
+        if (isEmptyStk(stk))
+                return;
+
+        FinishTime * top = stk->last;
+        stk->last = top->prev;
+        free(top);
+        stk->size--;
+}
+
+
+
 
 void printArrays(int n, int * dTime, int * fTime, int * parent) {
         int i;
@@ -442,15 +404,6 @@ void printArrays(int n, int * dTime, int * fTime, int * parent) {
 
 }
 
-void printStk(int * fStk, int n) {
-        int i;
-
-        puts("=====================stack========================");
-        printf("order\t vertex\n");
-        for (i = 1; i <= n; ++i)
-                printf("%d:\t %d\n", i, fStk[i]);
-        puts(" ");
-}
 
 
 /*dfsPhase2*/
@@ -465,7 +418,7 @@ int * initDfstRoot(int num) {
         return dfstRoot;
 }
 
-void dfsTsweep2(IntList * adjTrans, int n, int * fStk) {
+void dfsTsweep2(IntList * adjTrans, int n, Stack * fStk) {
         int * color2, * dTime2, * fTime2;
         int * parent2, * scc;
         int time = 0;
@@ -482,9 +435,11 @@ void dfsTsweep2(IntList * adjTrans, int n, int * fStk) {
         /*pop the stack and use DFS to transpose graph*/
         int i;
         for (i = n; i > 0; --i) {
-                if (color2[fStk[i]] == WHITE)
-                        time = dfsT2(adjTrans, color2, fStk[i], fStk[i],\
-                                     scc, dTime2, fTime2, parent2, time);
+                int v = topStk(fStk);
+                popStk(fStk);
+                if (color2[v] == WHITE)
+                        time = dfsT2(adjTrans, color2, v, v, scc,\
+                                     dTime2, fTime2, parent2, time);
         }
 
         /*print out the results*/
