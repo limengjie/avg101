@@ -54,6 +54,9 @@ int main(int argc, char* argv[]) {
 	/*scc phase 1*/
 	int * finishStk1 = dfsSweep1(adjVertices, n);
 
+	/*print out the stack*/
+	printStk(finishStk1, n);
+
 
 
 	/*transpose a graph*/

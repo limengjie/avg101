@@ -199,8 +199,8 @@ int hasCycleLen(IntList * origGraph, int n, int sofar, IntList v) {
 
 /*Scc phase 1*/
 int * dfsSweep1(IntList * adjVs, int n) {
-        int * color, * dTime1, * fTime1;
-        int * parent1, * fStk1 = NULL;
+        int * color, * dTime1, * fTime1, * parent1;
+        int * fStk1 = NULL;
         int time = 0;
 
         /*initialize arrays we are going to use later in DFS*/
@@ -209,6 +209,7 @@ int * dfsSweep1(IntList * adjVs, int n) {
         fTime1 = initFinishTime(n);
         parent1 = initParent(n);
         fStk1 = initFinishTime(n);
+        
 
 
 
@@ -222,8 +223,8 @@ int * dfsSweep1(IntList * adjVs, int n) {
         /*print out the results*/
         printArrays(n, dTime1, fTime1, parent1);
 
-        /*print out the stack*/
-        printStk(fStk1, n);
+        /*[>print out the stack<]*/
+        /*printStk(fStk1, n);*/
 
 
         /*free heap*/
@@ -232,9 +233,103 @@ int * dfsSweep1(IntList * adjVs, int n) {
         free(fTime1);
         free(parent1);
 
+        ////////////////////////////////////////////////
+        /*[>teststack<]*/
+        /*Stack * stk_ptr = initStk();*/
+        /*int array[5] = {0, 1, 2, 3, 4};*/
+        /*int j;*/
+        /*for(j = 0; j < 5; ++j) {*/
+                /*pushStk(stk_ptr, array[j]);*/
+        /*}*/
+
+        /*if (isEmptyStk(stk_ptr))*/
+                /*puts("Empty stack\n");*/
+        /*else*/
+                /*printf("stack size = %d\n", stk_ptr->size);*/
+
+        /*printStack(stk_ptr);*/
+
+        /*while(!isEmptyStk(stk_ptr)) {*/
+                /*printf("pop %d\n", topStk(stk_ptr));*/
+                /*popStk(stk_ptr);*/
+        /*}*/
+
+        /*printStack(stk_ptr);*/
+
+        /////////////////////////////////////////////
+
         return fStk1;
 }
 
+////////////////////////new stack///////////////////////////////////
+Stack * initStk() {
+        Stack * stk = (Stack *)malloc(sizeof(Stack));
+        stk->last = NULL;
+        stk->size = 0;
+
+        return stk;
+}
+
+int isEmptyStk(Stack * stk) {
+        if (stk->size == 0)
+                return 1;
+        else
+                return 0;
+}
+
+void printStack(Stack * stk) {
+        if (isEmptyStk(stk)) {
+                puts("Empty stack");
+                return;
+        }
+
+        FinishTime * ft = stk->last;
+        puts("=====================Stack=====================");
+        while(ft) {
+                printf("%d\n", ft->time);
+                ft = ft->prev;
+        }
+        puts(" ");
+}
+
+
+void pushStk(Stack * stk, int elt) {
+        /*create a new FinishTime*/
+        FinishTime * newElt = (FinishTime *)malloc(sizeof(FinishTime));
+
+        newElt->next = NULL;
+        newElt->time = elt;
+        newElt->prev = stk->last;
+        if (!isEmptyStk(stk)) {
+                (stk->last)->next = newElt;
+        }
+        stk->last = newElt;
+        stk->size++;
+}
+
+
+int topStk(Stack * stk) {
+        if (isEmptyStk(stk))
+                return -1;
+        else
+                return (stk->last)->time;
+}
+
+void popStk(Stack * stk) {
+        if (isEmptyStk(stk))
+                return;
+
+        FinishTime * top = stk->last;
+        stk->last = top->prev;
+        free(top);
+        stk->size--;
+}
+
+
+
+        //////////////////////////////////////////////////////
+        
+        
 int dfsTrace1(IntList * adjVs, int v, int * color, int * dTime,\
                 int * fTime, int * parent, int * fStk, int time) {
         int w;
@@ -331,6 +426,8 @@ int * initFinishStk(int num) {
 
         return fStk;
 }
+
+        
 
 void printArrays(int n, int * dTime, int * fTime, int * parent) {
         int i;

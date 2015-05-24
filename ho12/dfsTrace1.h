@@ -23,11 +23,40 @@ int hasCycleLen(IntList[], int, int, IntList);
 
 
 //DFS
+
+
+
 int * initColor(int);
 int * initDiscoverTime(int);
 int * initFinishTime(int);
 int * initParent(int);
 int * initFinishStk(int);
+//new stack ///////////////////////////////////////////
+struct finishTime
+{
+   int time;
+   struct finishTime * prev;
+   struct finishTime * next;
+};
+
+typedef struct finishTime FinishTime;
+
+typedef struct
+{
+   int size;
+   FinishTime * last;
+} Stack;
+
+
+Stack * initStk();
+int isEmptyStk(Stack *);
+void printStack(Stack *);
+void pushStk(Stack *, int);
+int topStk(Stack *);
+void popStk(Stack *);
+
+
+/////////////////////////////////////////////////////////
 int * dfsSweep1(IntList[], int);
 int dfsTrace1(IntList[], int, int[], int[], int[],\
                               int[], int[], int);
