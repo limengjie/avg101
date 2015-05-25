@@ -1,29 +1,16 @@
 #include "intList.h"
+//#include "loadGraph.h"
 
 #ifndef DFS1
 #define DFS1
 
-//load and build graph
-typedef struct {                                                                
-   int from;
-   int to;
-   double weight;
-} Edge;
+#define WHITE 0
+#define GRAY  1
+#define BLACK 2
 
-
-FILE * open_file(char *);
-IntList * initEdges(int);
-int parseN(char *);
-Edge parseEdges(char *, int);
-void loadEdges(char *, IntList[], int);
-void printGraph(IntList[], int);
-IntList * transposeGraph(IntList[], int);
-int hasCycle(IntList[], int);
-int hasCycleLen(IntList[], int, int, IntList);
 
 
 //DFS
-
 
 
 int * initColor(int);
@@ -56,17 +43,10 @@ int topStk(Stack *);
 void popStk(Stack *);
 
 
+void printArrays(int, int[], int[], int[]);
 Stack * dfsSweep1(IntList[], int);
 int dfsTrace1(IntList[], int, int[], int[], int[],\
                               int[], Stack *, int);
-
-//dfsPhase2
-int * initDfstRoot(int);
-void printArrays(int, int[], int[], int[]);
-void printScc(int[], int);
-int dfsT2(IntList[], int[], int, int,\
-      int[], int[], int[], int[], int);
-void dfsTsweep2(IntList[], int, Stack *);
 
 
 #endif

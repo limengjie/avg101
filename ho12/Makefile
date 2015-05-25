@@ -17,18 +17,30 @@
 #
 # ===================================================================
 
-CC     = gcc
-CFLAGS = -g -Wall -O0
+#CC     = gcc
+#CFLAGS = -g -Wall -O0
 
 
-intList.o:	intList.c  intList.h
-	${CC}  -c  ${CFLAGS}  intList.c
+#intList.o:	intList.c  intList.h
+	#${CC}  -c  ${CFLAGS}  intList.c
 
-disTrace1.o:	dfsTrace1.c  dfsTrace1.h
-	${CC}  -c  ${CFLAGS}  dfsTrace1.c
+#disTrace1.o:	dfsTrace1.c  dfsTrace1.h
+	#${CC}  -c  ${CFLAGS}  dfsTrace1.c
 
-scc03.o:	scc03.c  intList.h dfsTrace1.h
-	${CC}  -c  ${CFLAGS}  scc03.c
+#scc03.o:	scc03.c  intList.h dfsTrace1.h
+	#${CC}  -c  ${CFLAGS}  scc03.c
 
-scc03:	scc03.o  intList.o 
-	${CC}  -o  scc03  scc03.o intList.o dfsTrace1.o
+#scc03:	scc03.o  intList.o 
+	#${CC}  -o  scc03  scc03.o intList.o dfsTrace1.o
+
+CSOURCE = intList.c loadGraph.c dfsTrace1.c dfsPhase2.c scc03.c
+CHEADER = intList.h loadGraph.h dfsTrace1.h dfsPhase2.h
+OBJECTS = ${CSOURCE:.c=.o}
+EXEBIN = scc03
+COMPILEC = gcc -g -Wall -O0
+${EXEBIN} : ${OBJECTS}
+	${COMPILEC} -o $@ ${OBJECTS}
+%.o : %.c
+	${COMPILEC} -c $<
+
+
