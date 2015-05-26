@@ -18,9 +18,25 @@ typedef struct
 
 Stack * initStk();
 int isEmptyStk(Stack *);
+
+//Access function
+//Precondition: Stack is not nil.
+//Postcondition: None.
 void printStk(Stack *);
+
+//Access function
+//Precondition: None.
+//Postcondition: Stack is not nil.
 void pushStk(Stack *, int);
+
+//Access function
+//Precondition: stack is not nil.
+//return: the first element's time, return -1 if stack is nil.
 int topStk(Stack *);
+
+//Access function
+//Precondition: Stack is not nil.
+//Postcondition: None.
 void popStk(Stack *);
 
 #endif

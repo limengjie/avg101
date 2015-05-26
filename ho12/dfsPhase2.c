@@ -17,7 +17,7 @@ int * initDfstRoot(int num) {
 
 void dfsTsweep2(IntList * adjTrans, int n, Stack * fStk) {
         int * color2, * dTime2, * fTime2;
-        int * parent2, * scc;
+        int * parent2, * dfstRoot2;
         int time = 0;
 
         /*initialize arrays*/
@@ -27,7 +27,7 @@ void dfsTsweep2(IntList * adjTrans, int n, Stack * fStk) {
         parent2 = initParent(n);
         /*scc's
          * leader*/
-        scc = initDfstRoot(n);
+        dfstRoot2 = initDfstRoot(n);
 
         /*pop the stack and use DFS to transpose graph*/
         int i;
@@ -35,13 +35,13 @@ void dfsTsweep2(IntList * adjTrans, int n, Stack * fStk) {
                 int v = topStk(fStk);
                 popStk(fStk);
                 if (color2[v] == WHITE)
-                        time = dfsT2(adjTrans, color2, v, v, scc,\
+                        time = dfsT2(adjTrans, color2, v, v, dfstRoot2,\
                                      dTime2, fTime2, parent2, time);
         }
 
         /*print out the results*/
         printArrays(n, dTime2, fTime2, parent2);
-        printScc(scc, n);
+        printScc(dfstRoot2, n);
 
 
         /*free heap*/
@@ -49,7 +49,7 @@ void dfsTsweep2(IntList * adjTrans, int n, Stack * fStk) {
         free(dTime2);
         free(fTime2);
         free(parent2);
-        free(scc);
+        free(dfstRoot2);
 
 }
 

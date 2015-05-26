@@ -1,5 +1,4 @@
 /* intList.h
- * (what is the purpose of this file?)
  */
 
 #ifndef C101IntList
