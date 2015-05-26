@@ -5,6 +5,7 @@
 #include <assert.h>
 #include "intList.h"
 #include "loadGraph.h"
+#include "ftStack.h"
 #include "dfsTrace1.h"
 #include "dfsPhase2.h"
 

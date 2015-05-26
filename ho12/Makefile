@@ -33,8 +33,8 @@
 #scc03:	scc03.o  intList.o 
 	#${CC}  -o  scc03  scc03.o intList.o dfsTrace1.o
 
-CSOURCE = intList.c loadGraph.c dfsTrace1.c dfsPhase2.c scc03.c
-CHEADER = intList.h loadGraph.h dfsTrace1.h dfsPhase2.h
+CSOURCE = intList.c loadGraph.c ftStack.c dfsTrace1.c dfsPhase2.c scc03.c
+CHEADER = intList.h loadGraph.h ftStack.h dfsTrace1.h dfsPhase2.h
 OBJECTS = ${CSOURCE:.c=.o}
 EXEBIN = scc03
 COMPILEC = gcc -g -Wall -O0
@@ -44,3 +44,5 @@ ${EXEBIN} : ${OBJECTS}
 	${COMPILEC} -c $<
 
 
+clean:
+	- rm ${OBJECTS}

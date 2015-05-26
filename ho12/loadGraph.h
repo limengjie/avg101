@@ -1,7 +1,7 @@
-#include "intList.h"
-
 #ifndef LOADGRAPH
 #define LOADGRAPH
+
+#include "intList.h"
 
 //load and build graph
 typedef struct {
