@@ -115,7 +115,7 @@ int * initParent(int num) {
         /*memset((void *)parent, -1, num + 1);*/
         int i;
         for (i = 0; i <= num; ++i)
-                parent[i] = - 1;
+                parent[i] = -1;
 
         return parent;
 }
@@ -127,7 +127,7 @@ void printArrays(int n, int * dTime, int * fTime, int * parent) {
         puts("======================arrays========================");
         puts("vertex\t dTime\t fTime\t parent");
         for(i = 1; i <= n; ++i) {
-                printf("%d\t %d\t", i, dTime[i]);
+                printf("  %d\t  %d\t  ", i, dTime[i]);
                 printf("%d\t %d\n", fTime[i], parent[i]);
         }
         puts(" ");

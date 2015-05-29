@@ -29,13 +29,20 @@ testFiles
 
 In scc03.c, the main function is used to call diferent functions to 
 complete the scc algorithm.
+1.open a input file
+2.read and parse the file 
+3.build the graph 
+4.print graph
+5.SCC phase 1
+6.transpose graph
+7.SCC phase 2
 
 intList.c defines ADT's member functions such as intFirst, intRest and intCons.
 intList.h remains the same according to the requirement.
 
 In loadGraph.h and loadGraph.c, functions such as parseN, initEdges, 
-loadEdges, print, transposeGraph, hasCycle and hasCycleLen are declared 
-and defined to build the graph according to the input file.
+loadEdges, printGraph, transposeGraph, hasCycle and hasCycleLen are 
+declared and defined to build the graph according to the input file.
 
 In ftStack.h and ftStack.c, stack functions such as initStk, isEmptyStk,
 printStk, pushStk, topStk and popStk are use to manipulate the finish time
@@ -47,6 +54,7 @@ initColor(int), initDiscoverTime(int), initFinishTime(int) and
 initParent(int) are used to initialize those arrays will be used in DFS.
 Then call dfsSweep1 and dfsTrace1 to finish the DFS, fill the related 
 arrays and push those vertices into stack based on their finish time.
+The dfsSweep1 will return the finishStack for next scc phase.
 
 In dfsPhase2.h and dfsPhase2.c, functions are declared and defined to 
 accomplish the second phase of scc algorithm. 

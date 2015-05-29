@@ -13,7 +13,7 @@
 int main(int argc, char* argv[]) {
 
 	if (argc != 2) {
-		fprintf(stderr, "Usage: graph01 input.data \n");
+		fprintf(stderr, "Usage: scc03 input.data \n");
 		exit(0);
 	}
 
