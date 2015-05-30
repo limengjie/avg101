@@ -16,6 +16,11 @@ typedef struct
 	FinishTime * last;
 } Stack;
 
+//Constructor
+//Precondition: None.
+//Postcondition: if s = initStk() then:
+//1.s refers to a newly created object.
+//2.isEmpty(s) = true.
 Stack * initStk();
 
 //Access function
@@ -28,7 +33,9 @@ void printStk(Stack *);
 
 //Manipulation procedures
 //Precondition: None.
-//Postcondition: Stack is not nil.
+//Postcondition: 
+//1.Stack is not nil.
+//2.topStk(s) = e.
 void pushStk(Stack *, int);
 
 //Access function
