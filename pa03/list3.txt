@@ -1,0 +1,18 @@
+total 64K
+-rw-rw-r-- 1 parallels parallels 3.5K Jun  1 08:58 loadGraph.c
+-rw-rw-r-- 1 parallels parallels 3.1K Jun  1 08:58 dfsTrace1.c
+-rw-rw-r-- 1 parallels parallels 2.5K Jun  1 08:58 dfsPhase2.c
+-rw-rw-r-- 1 parallels parallels 2.3K Jun  1 08:58 ReadMe.txt
+-rw-rw-r-- 1 parallels parallels 1.5K Jun  1 08:58 scc03.c
+-rw-rw-r-- 1 parallels parallels 1.3K Jun  1 08:58 Makefile
+-rw-rw-r-- 1 parallels parallels 1.1K Jun  1 09:17 ftStack.c
+-rw-rw-r-- 1 parallels parallels  914 Jun  1 09:16 ftStack.h
+-rw-r--r-- 1 parallels parallels  775 Jun  1 08:58 intList.h
+-rw-rw-r-- 1 parallels parallels  506 Jun  1 08:58 loadGraph.h
+-rw-rw-r-- 1 parallels parallels  440 Jun  1 08:58 intList.c
+-rw-rw-r-- 1 parallels parallels  424 Jun  1 08:58 dfsTrace1.h
+-rw-rw-r-- 1 parallels parallels  291 Jun  1 08:58 dfsPhase2.h
+-rw-rw-r-- 1 parallels parallels   72 Jun  1 08:58 g724.in
+-rw-rw-r-- 1 parallels parallels   54 Jun  1 08:58 g711.in
+-rw-rw-r-- 1 parallels parallels   44 Jun  1 08:58 test.in
+-rw-rw-r-- 1 parallels parallels    0 Jun  2 18:10 list3.txt
