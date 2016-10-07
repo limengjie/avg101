@@ -1,8 +1,0 @@
-total 24K
-drwxrwxr-x 2 parallels parallels 4.0K Jun  1 08:58 testFiles
--rw-rw-r-- 1 parallels parallels 3.2K Jun  1 08:58 graph01.c
--rw-rw-r-- 1 parallels parallels 1.1K Jun  1 08:58 ReadMe.txt
--rw-rw-r-- 1 parallels parallels  914 Jun  1 08:58 Makefile
--rw-rw-r-- 1 parallels parallels  551 Jun  1 08:58 intList.h
--rw-rw-r-- 1 parallels parallels  440 Jun  1 08:58 intList.c
--rw-rw-r-- 1 parallels parallels    0 Jun  2 18:09 list1.txt
